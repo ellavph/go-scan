@@ -1,0 +1,42 @@
+# Virtual Environment
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Compiled source
+*.pyc
+
+# VS Code directory
+.vscode/
+
+# Database
+db.sqlite3
+
+# Generated files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Editor-specific files
+.idea/
+
+# Environment variable file
+.env
+
+# Byte-compiled Python files
+*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Sensitive or environment-specific files
+.env
