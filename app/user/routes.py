@@ -1,19 +1,23 @@
 # app/user/routes.py
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.user.services import UserService
-from app.user.models import User
+from app.user.schemas import UserSchema
 from app.user.repositories import UserRepository
+from sqlalchemy.orm import Session
+from app.settings.database import get_db
 
 router = APIRouter()
-user_service = UserService(user_repository=UserRepository())  # Use uma injeção de dependência adequada aqui
 
-@router.get("/{user_id}", response_model=User)
-def read_user(user_id: int):
+
+@router.get("/{user_id}", response_model=UserSchema)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user_service = UserService(user_repository=UserRepository(db))
     user = user_service.get_user(user_id)
-    if user:
-        return user
-    raise HTTPException(status_code=404, detail="User not found")
+    return user
 
-@router.post("/", response_model=User)
-def create_user(user: User):
-    return user_service.create_user(user)
+
+@router.post("/", response_model=UserSchema)
+def create_user(user: UserSchema, db: Session = Depends(get_db)):
+    user_service = UserService(user_repository=UserRepository(db))
+    created_user = user_service.create_user(user)
+    return created_user
