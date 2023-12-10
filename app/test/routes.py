@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import  APIRouter
 
-app = FastAPI()
+router = APIRouter()
 
-@app.get("/test")
+
+@router.get("/test")
 def test_route():
     return {"message": "Test route"}
