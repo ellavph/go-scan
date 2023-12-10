@@ -7,5 +7,11 @@
 		{ "src": "/docs", "dest": "app/main.py" },
 		{ "src": "/openapi.json", "dest": "app/main.py" },
         { "src": "/user/(.*)", "dest": "app/user/routes.py" }
-	]
+	],
+	"rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
 }
