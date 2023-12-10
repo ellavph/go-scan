@@ -11,7 +11,7 @@ from app.settings.database import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-from app.user.models import User
+from app.user.models import UserModel
 
 
 

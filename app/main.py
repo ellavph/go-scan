@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from app.user.routes import router as user_router
 from fastapi.responses import RedirectResponse
 
-from app.settings.database import Base, engine
 
 app = FastAPI()
 
@@ -11,10 +10,11 @@ app.include_router(user_router, prefix="/users", tags=["users"])
 
 
 @app.get("/", include_in_schema=False)
-def read_root():
+def index():
     return RedirectResponse(url="/docs", status_code=302)
 
-if __name__ == "__main__":
 
-    # Configuração personalizada do Uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=False)
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="127.0.0.1", port=8000, debug=True)

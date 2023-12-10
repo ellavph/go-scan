@@ -1,15 +1,18 @@
-# app/user/security.py
-from typing import Optional
-from app.user.schemas import UserSchema
+from app.settings.database import get_db
+from app.user.models import UserModel
+from sqlalchemy.orm import Session
 
 
 class UserRepository:
-    def get_user_by_id(self, user_id: int):
-        # Lógica para recuperar um usuário por ID (simulação)
-        return {}
+    def __init__(self, db: Session = get_db()):
+        self.db = db
 
-        #return User(id=user_id, username=f"user{user_id}", email=f"user{user_id}@example.com")
+    def create_user(self, document: str, username: str, password: str, email: str):
+        user = UserModel(id=document, username=username, password=password, email=email)
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
 
-    def save_user(self, user: UserSchema) -> UserSchema:
-        # Lógica para salvar um usuário (simulação)
-        return {}
+    def get_user_by_username(self, username: str):
+        return self.db.query(UserModel).filter(UserModel.username == username).first()
