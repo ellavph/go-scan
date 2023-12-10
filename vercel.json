@@ -6,6 +6,7 @@
 		{ "src": "/", "dest": "app/main.py" },
 		{ "src": "/docs", "dest": "app/main.py" },
 		{ "src": "/openapi.json", "dest": "app/main.py" },
+		{ "src": "/test", "dest": "app/main.py" },
     	{ "src": "/user/(.*)", "dest": "app/user/routes.py" }
 	]
 }
