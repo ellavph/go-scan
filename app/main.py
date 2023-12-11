@@ -5,13 +5,13 @@ from fastapi.responses import RedirectResponse
 
 app = FastAPI()
 
-app.include_router(router=routes.router, prefix="/users", tags=["users"])
-
 
 @app.get("/", include_in_schema=False)
 def index():
     return RedirectResponse(url="/docs", status_code=302)
 
+
+app.include_router(router=routes.router, prefix="/users", tags=["users"])
 
 if __name__ == "__main__":
     import uvicorn
