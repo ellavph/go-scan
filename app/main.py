@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from app.user import routes
 from fastapi.responses import RedirectResponse
 
-#
 app = FastAPI()
 
 app.include_router(router=routes.router, prefix="/users", tags=["users"])
