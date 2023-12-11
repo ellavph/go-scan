@@ -5,7 +5,7 @@ from app.settings.database import get_db
 from app.user.services import UserService
 from app.user.schemas import UserCreate, UserLogin, LoginResponse
 
-router = APIRouter()
+router = APIRouter(tags=["System"])
 
 
 @router.post("/login", response_model=LoginResponse)
