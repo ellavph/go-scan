@@ -12,8 +12,3 @@ def index():
 
 
 app.include_router(router=routes.router, prefix="/users", tags=["users"])
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="127.0.0.1", port=8000)
