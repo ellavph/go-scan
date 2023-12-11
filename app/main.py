@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from app.users import routes
+from app.user import routes
 from fastapi.responses import RedirectResponse
 
 #
