@@ -1,5 +1,5 @@
 from app.settings.database import get_db
-from app.user.models import UserModel
+from app.users.models import UserModel
 from sqlalchemy.orm import Session
 
 

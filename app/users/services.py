@@ -1,7 +1,7 @@
 
 from app.settings.database import get_db
-from app.user.repositories import UserRepository
-from app.user.schemas import UserCreate
+from app.users.repositories import UserRepository
+from app.users.schemas import UserCreate
 from app.utils.utils import hash_password, verify_password
 
 
