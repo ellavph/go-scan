@@ -1,18 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from starlette.responses import RedirectResponse
 
 from app.settings.database import get_db
 from app.user.services import UserService
 from app.user.schemas import UserCreate, UserLogin, LoginResponse
 
 router = APIRouter()
-
-
-
-@router.get("/", include_in_schema=False)
-def index():
-    return RedirectResponse(url="/docs", status_code=302)
 
 
 @router.post("/login", response_model=LoginResponse)
