@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 #
 app = FastAPI()
 
-app.include_router(router=routes.router, prefix="/users")
+app.include_router(router=routes.router, prefix="/users", tags=["users"])
 
 
 @app.get("/", include_in_schema=False)
