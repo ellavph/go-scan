@@ -19,7 +19,9 @@ class UserCreate(BaseModel):
 
 
 class LoginResponse(BaseModel):
-    token: str
+    access_token: str
+    refresh_token: str
+    type: str
 
 
 class CreateResponse(BaseModel):

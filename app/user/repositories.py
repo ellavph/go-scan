@@ -16,3 +16,12 @@ class UserRepository:
 
     def get_user_by_username(self, username: str):
         return self.db.query(UserModel).filter(UserModel.username == username).first()
+
+    def get_user_by_email(self, email: str):
+        return self.db.query(UserModel).filter(UserModel.email == email).first()
+
+    def get_user_by_id(self, document: str):
+        return self.db.query(UserModel).filter(UserModel.id == document).first()
+
+    def get_user_by_field(self, field_name: str, field_value: str):
+        return self.db.query(UserModel).filter_by(**{field_name: field_value}).first()
