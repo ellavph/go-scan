@@ -1,10 +1,12 @@
+from fastapi import Depends
+
 from app.settings.database import get_db
 from app.user.models import UserModel
 from sqlalchemy.orm import Session
 
 
 class UserRepository:
-    def __init__(self, db: Session = get_db()):
+    def __init__(self, db: Session):
         self.db = db
 
     def create_user(self, document: str, username: str, password: str, email: str):

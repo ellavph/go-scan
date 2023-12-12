@@ -17,11 +17,11 @@ class UserService:
         if user and verify_password(password, user.password):
             # Se o usuário é autenticado com sucesso, gera o token JWT de acesso
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-            access_token = AuthService.create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
+            access_token = AuthService.create_access_token(data={"username": user.username, "document": user.id}, expires_delta=access_token_expires)
 
             # Gera o token JWT de atualização
             refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRES)  # Expira em 2 minutos, ajuste conforme necessário
-            refresh_token = AuthService.create_access_token(data={"sub": user.username}, expires_delta=refresh_token_expires)
+            refresh_token = AuthService.create_access_token(data={"username": user.username, "document": user.id}, expires_delta=refresh_token_expires)
 
             # Retorna ambos os tokens
             return True, {"access_token": access_token, "refresh_token": refresh_token}
@@ -47,3 +47,6 @@ class UserService:
                 return user, field  # Retorna o usuário e o campo correspondente
 
         return None, None
+
+    def get_details(self, current_user: dict):
+        self.user_repository.get_user_by_id(document=current_user.get('document'))

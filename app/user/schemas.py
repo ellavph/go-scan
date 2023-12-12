@@ -1,20 +1,16 @@
 from pydantic import BaseModel
 
 
-class Login(BaseModel):
+class BaseUser(BaseModel):
     username: str
+
+
+class UserLogin(BaseUser):
     password: str
 
 
-class UserLogin(BaseModel):
-    username: str
-    password: str
-
-
-class UserCreate(BaseModel):
+class UserCreate(UserLogin):
     document: str
-    username: str
-    password: str
     email: str
 
 
@@ -22,7 +18,3 @@ class LoginResponse(BaseModel):
     access_token: str
     refresh_token: str
     type: str
-
-
-class CreateResponse(BaseModel):
-    username: str
