@@ -30,7 +30,11 @@ class UserService:
     def create_user(self, user_data: UserCreate):
         user_data.password = hash_password(password=user_data.password)
 
-        return self.user_repository.create_user(**user_data.model_dump())
+        user = self.user_repository.create_user(**user_data.model_dump())
+        if user:
+            self.user_repository.create_balance(user_id=user.id)
+
+        return user
 
     def get_user(self, user_data: UserCreate):
         fields_to_check = ["username", "email", "document"]

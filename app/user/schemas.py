@@ -12,6 +12,8 @@ class UserLogin(BaseUser):
 class UserCreate(UserLogin):
     document: str
     email: str
+    first_name: str
+    last_name: str
 
 
 class LoginResponse(BaseModel):
@@ -25,3 +27,4 @@ class UserDetailsResponse(BaseUser):
     name: str
     id: str
     balance: float
+
