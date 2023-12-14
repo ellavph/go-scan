@@ -1,4 +1,4 @@
-from app.user.models import UserModel, UserBalance
+from app.user.models import UserModel, UserBalance, LogUserBalance
 from sqlalchemy.orm import Session
 
 
@@ -34,3 +34,6 @@ class UserRepository:
 
     def get_user_balance(self, user_id: str):
         return self.db.query(UserBalance).filter(UserBalance.user_id == user_id).first()
+
+    def get_user_transaction_history(self, balance_id: str, month_and_year: str):
+        return list(self.db.query(LogUserBalance).filter(LogUserBalance.balance_id == balance_id, LogUserBalance.month_and_year == month_and_year))

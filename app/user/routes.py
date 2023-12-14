@@ -42,3 +42,10 @@ def home(current_user: dict = Depends(get_current_user), db: Session = Depends(g
     if details is None:
         raise HTTPException(status_code=500, detail='Details not found')
     return details
+
+
+@router.get('/transaction/history')
+def transaction_history(month_and_year: str, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    user_service = UserService(db)
+    historic = user_service.transaction_history(current_user, month_and_year)
+    return historic

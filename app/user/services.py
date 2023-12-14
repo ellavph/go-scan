@@ -1,3 +1,4 @@
+import copy
 from typing import Tuple, Dict
 
 from app.settings.database import get_db
@@ -64,3 +65,31 @@ class UserService:
             'balance': balance.balance if balance.balance >= 0 else balance.balance * -1,
             'picture': user.picture if user.picture else 'default.svg'
         }
+
+    def transaction_history(self, current_user: dict, month_and_year: str):
+        historic = []
+        user = self.user_repository.get_user_by_id(document=current_user.get('document'))
+        if user is None:
+            return None
+
+        balance = self.user_repository.get_user_balance(user.id)
+
+        if not balance and not month_and_year:
+            return None
+
+        history = self.user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
+        if history is None:
+            return None
+
+        for h in history:
+            historic.append(copy.deepcopy({
+                'id': h.id,
+                'balance_id': h.balance_id,
+                'previous_value': h.previous_value,
+                'current_value': h.current_value,
+                'transaction_value': h.transaction_value,
+                'month_and_year': h.month_and_year,
+                'type': h.type
+            }))
+
+        return historic

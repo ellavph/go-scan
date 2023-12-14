@@ -36,9 +36,9 @@ class LogUserBalance(Base, Log):
     __tablename__ = "log_user_balance"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_balance_id = Column(Integer, ForeignKey("user_balance.id"), index=True)
+    balance_id = Column(Integer, ForeignKey("user_balance.id"), index=True)
     previous_value = Column(Float, nullable=True)
     current_value = Column(Float, nullable=True)
     transaction_value = Column(Float, nullable=True)
-    month = Column(String, nullable=True)
+    month_and_year = Column(String, nullable=True)
     type = Column(String, nullable=True)
