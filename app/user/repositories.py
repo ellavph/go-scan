@@ -1,7 +1,4 @@
-from fastapi import Depends
-
-from app.settings.database import get_db
-from app.user.models import UserModel
+from app.user.models import UserModel, UserBalance
 from sqlalchemy.orm import Session
 
 
@@ -17,7 +14,7 @@ class UserRepository:
         return user
 
     def get_user_by_username(self, username: str):
-        return self.db.query(UserModel).filter(UserModel.username == username).first()
+        return self.db.query(UserModel).filter(UserModel.username == username, UserModel.status).first()
 
     def get_user_by_email(self, email: str):
         return self.db.query(UserModel).filter(UserModel.email == email).first()
@@ -27,3 +24,6 @@ class UserRepository:
 
     def get_user_by_field(self, field_name: str, field_value: str):
         return self.db.query(UserModel).filter_by(**{field_name: field_value}).first()
+
+    def get_user_balance(self, user_id: str):
+        return self.db.query(UserBalance).filter(UserBalance.user_id == user_id).first()

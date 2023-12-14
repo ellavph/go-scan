@@ -3,8 +3,7 @@ from datetime import datetime, timedelta
 from fastapi import HTTPException
 
 secret_key = 'nXe4-ZQEiFYBR3iJfuT0Tm9m6LlL9e6khhF2ZcvahdA'
-ACCESS_TOKEN_EXPIRE_MINUTES = 0.30
-ACCESS_TOKEN_EXPIRE_MINUTES = 120
+ACCESS_TOKEN_EXPIRE_MINUTES = 1440 # 1 dia
 REFRESH_TOKEN_EXPIRES = 2
 
 

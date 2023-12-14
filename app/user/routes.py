@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.settings.database import get_db
 from app.user.services import UserService
-from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse
+from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, UserDetailsResponse
 from app.auth.dependencies import get_current_user
 
 router = APIRouter()
@@ -34,9 +34,11 @@ def create(user_data: UserCreate, db: Session = Depends(get_db)):
     return BaseUser(username=user.username)
 
 
-@router.get('/details')
+@router.get('/details', response_model=UserDetailsResponse)
 def home(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     user_service = UserService(db)
-    user_service.get_details(current_user)
+    details = user_service.get_details(current_user)
 
-    return {'Oi': 'Em obras'}
+    if details is None:
+        raise HTTPException(status_code=500, detail='Internal Server Error.')
+    return details
