@@ -70,16 +70,16 @@ class UserService:
         historic = []
         user = self.user_repository.get_user_by_id(document=current_user.get('document'))
         if user is None:
-            return None
+            return historic
 
         balance = self.user_repository.get_user_balance(user.id)
 
         if not balance and not month_and_year:
-            return None
+            return historic
 
         history = self.user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
         if history is None:
-            return None
+            return historic
 
         for h in history:
             historic.append(copy.deepcopy({
