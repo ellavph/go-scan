@@ -40,5 +40,5 @@ def home(current_user: dict = Depends(get_current_user), db: Session = Depends(g
     details = user_service.get_details(current_user)
 
     if details is None:
-        raise HTTPException(status_code=500, detail='Internal Server Error.')
+        raise HTTPException(status_code=500, detail='Details not found')
     return details
