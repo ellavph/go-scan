@@ -38,3 +38,13 @@ class UserResponseModel(BaseUser):
     first_name: str
     last_name: str
     profile: str
+
+
+class HistoryResponse(BaseModel):
+    id: int
+    balance_id: int
+    previous_value: float
+    current_value: float
+    transaction_value: float
+    month_and_year: str
+    type: str

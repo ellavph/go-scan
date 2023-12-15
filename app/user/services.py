@@ -66,33 +66,26 @@ class UserService:
             'picture': user.picture if user.picture else 'default.svg'
         }
 
-    def transaction_history(self, user_id: str, month_and_year: str):
+    def transaction_history(self, user_id: str, month_and_year: str, current_user: dict):
         historic = []
+        if current_user.get('profile') not in ['admin']:
+            return historic, 'Not authorized', 403
+
         user = self.user_repository.get_user_by_id(document=user_id)
         if user is None:
-            return historic
+            return historic, 'User not found', 404
 
         balance = self.user_repository.get_user_balance(user.id)
 
         if not balance and not month_and_year:
-            return historic
+            return historic, 'Bad request: No balance and no specified month/year', 400
 
-        history = self.user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
-        if history is None:
-            return historic
+        historic = self.user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
 
-        for h in history:
-            historic.append(copy.deepcopy({
-                'id': h.id,
-                'balance_id': h.balance_id,
-                'previous_value': h.previous_value,
-                'current_value': h.current_value,
-                'transaction_value': h.transaction_value,
-                'month_and_year': h.month_and_year,
-                'type': h.type
-            }))
+        if not historic:
+            return [], 'No transaction history available for the specified date', 200
 
-        return historic
+        return historic, 'Transaction history retrieved successfully', 200
 
     def get_all_users(self, current_user: dict):
         if current_user.get('profile') not in ['admin']:

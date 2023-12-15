@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.settings.database import get_db
 from app.user.services import UserService
-from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, UserDetailsResponse, UserResponseModel
+from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, UserDetailsResponse, UserResponseModel, HistoryResponse
 from app.auth.dependencies import get_current_user
 
 from typing import List
@@ -46,10 +46,12 @@ def home(current_user: dict = Depends(get_current_user), db: Session = Depends(g
     return details
 
 
-@router.get('/transaction/history')
+@router.get('/transaction/history', response_model=List[HistoryResponse])
 def transaction_history(user_id: str, month_and_year: str, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     user_service = UserService(db)
-    historic = user_service.transaction_history(user_id, month_and_year)
+    historic, description, status_code = user_service.transaction_history(user_id, month_and_year, current_user)
+    if not historic:
+        raise HTTPException(status_code=status_code, detail=description)
     return historic
 
 
