@@ -1,3 +1,5 @@
+from cgi import parse_qs
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -13,8 +15,13 @@ router = APIRouter()
 
 @router.post('/login', response_model=LoginResponse)
 def login(user_login: str | UserLogin, db: Session = Depends(get_db)):
+    if isinstance(user_login, str):
+        user_login = parse_qs(user_login)
+        user_login = {key: value[0] for key, value in user_login.items()}
+        user_login = UserLogin(**user_login)
+
     user_service = UserService(db)
-    authenticated, token_info = user_service.authenticate_user(user_login)
+    authenticated, token_info = user_service.authenticate_user(username=user_login.username, password=user_login.password)
 
     if authenticated:
         return LoginResponse(access_token=token_info.get('access_token'), refresh_token=token_info.get('refresh_token'), type='Bearer')
