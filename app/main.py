@@ -4,7 +4,12 @@ from app.user import routes
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(
+    title="Go-Scan API",
+    description="Endpoints para integração com o back-end",
+    version="1.0.0"
+)
+
 
 origins = [
     "http://localhost:3000",
