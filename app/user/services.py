@@ -66,9 +66,9 @@ class UserService:
             'picture': user.picture if user.picture else 'default.svg'
         }
 
-    def transaction_history(self, current_user: dict, month_and_year: str):
+    def transaction_history(self, user_id: str, month_and_year: str):
         historic = []
-        user = self.user_repository.get_user_by_id(document=current_user.get('document'))
+        user = self.user_repository.get_user_by_id(document=user_id)
         if user is None:
             return historic
 
@@ -93,3 +93,7 @@ class UserService:
             }))
 
         return historic
+
+    def get_all_users(self):
+        all_users_database = self.user_repository.get_all_users()
+        return [{k: v for k, v in u.__dict__.items() if k not in ['password']} for u in all_users_database]

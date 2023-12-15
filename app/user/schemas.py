@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class BaseUser(BaseModel):
@@ -28,3 +29,12 @@ class UserDetailsResponse(BaseUser):
     id: str
     balance: float
 
+
+class UserResponseModel(BaseUser):
+    id: str
+    email: str
+    dat_insercao: datetime  # Ajuste o tipo de dado conforme necessário
+    status: bool
+    first_name: str
+    last_name: str
+    profile: str

@@ -37,3 +37,6 @@ class UserRepository:
 
     def get_user_transaction_history(self, balance_id: str, month_and_year: str):
         return list(self.db.query(LogUserBalance).filter(LogUserBalance.balance_id == balance_id, LogUserBalance.month_and_year == month_and_year))
+
+    def get_all_users(self):
+        return list(self.db.query(UserModel).filter(UserModel.status))

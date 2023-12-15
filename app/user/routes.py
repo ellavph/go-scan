@@ -3,8 +3,10 @@ from sqlalchemy.orm import Session
 
 from app.settings.database import get_db
 from app.user.services import UserService
-from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, UserDetailsResponse
+from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, UserDetailsResponse, UserResponseModel
 from app.auth.dependencies import get_current_user
+
+from typing import List
 
 router = APIRouter()
 
@@ -45,7 +47,14 @@ def home(current_user: dict = Depends(get_current_user), db: Session = Depends(g
 
 
 @router.get('/transaction/history')
-def transaction_history(month_and_year: str, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+def transaction_history(user_id: str, month_and_year: str, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     user_service = UserService(db)
-    historic = user_service.transaction_history(current_user, month_and_year)
+    historic = user_service.transaction_history(user_id, month_and_year)
     return historic
+
+
+@router.get('/all', response_model=List[UserResponseModel])
+def get_all_users(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    user_service = UserService(db)
+    all_users = user_service.get_all_users()
+    return all_users
