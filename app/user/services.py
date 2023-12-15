@@ -7,7 +7,7 @@ from app.user.schemas import UserCreate, UserDetailsResponse, UserLogin
 from app.utils.utils import hash_password, verify_password
 from datetime import timedelta
 from app.auth.auth_service import AuthService, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRES
-from urllib.parse import parse_qs
+
 
 class UserService:
     def __init__(self, db=get_db()):

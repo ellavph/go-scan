@@ -1,4 +1,3 @@
-from cgi import parse_qs
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -9,7 +8,7 @@ from app.user.schemas import UserCreate, BaseUser, UserLogin, LoginResponse, Use
 from app.auth.dependencies import get_current_user
 
 from typing import List
-
+from urllib.parse import parse_qs
 router = APIRouter()
 
 
