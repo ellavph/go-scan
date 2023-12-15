@@ -18,11 +18,11 @@ class UserService:
         if user and verify_password(password, user.password):
             # Se o usuário é autenticado com sucesso, gera o token JWT de acesso
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-            access_token = AuthService.create_access_token(data={"username": user.username, "document": user.id}, expires_delta=access_token_expires)
+            access_token = AuthService.create_access_token(data={"username": user.username, "document": user.id, 'profile': user.profile}, expires_delta=access_token_expires)
 
             # Gera o token JWT de atualização
             refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRES)  # Expira em 2 minutos, ajuste conforme necessário
-            refresh_token = AuthService.create_access_token(data={"username": user.username, "document": user.id}, expires_delta=refresh_token_expires)
+            refresh_token = AuthService.create_access_token(data={"username": user.username, "document": user.id, 'profile': user.profile}, expires_delta=refresh_token_expires)
 
             # Retorna ambos os tokens
             return True, {"access_token": access_token, "refresh_token": refresh_token}
@@ -94,6 +94,8 @@ class UserService:
 
         return historic
 
-    def get_all_users(self):
+    def get_all_users(self, current_user: dict):
+        if current_user.get('profile') not in ['admin']:
+            return []
         all_users_database = self.user_repository.get_all_users()
         return [{k: v for k, v in u.__dict__.items() if k not in ['password']} for u in all_users_database]

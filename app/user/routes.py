@@ -56,5 +56,5 @@ def transaction_history(user_id: str, month_and_year: str, current_user: dict = 
 @router.get('/all', response_model=List[UserResponseModel])
 def get_all_users(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     user_service = UserService(db)
-    all_users = user_service.get_all_users()
+    all_users = user_service.get_all_users(current_user)
     return all_users
