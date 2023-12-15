@@ -12,9 +12,9 @@ router = APIRouter()
 
 
 @router.post('/login', response_model=LoginResponse)
-def login(user_login: UserLogin, db: Session = Depends(get_db)):
+def login(user_login: str | UserLogin, db: Session = Depends(get_db)):
     user_service = UserService(db)
-    authenticated, token_info = user_service.authenticate_user(user_login.username, user_login.password)
+    authenticated, token_info = user_service.authenticate_user(user_login)
 
     if authenticated:
         return LoginResponse(access_token=token_info.get('access_token'), refresh_token=token_info.get('refresh_token'), type='Bearer')

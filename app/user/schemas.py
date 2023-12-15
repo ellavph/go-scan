@@ -1,50 +1,55 @@
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 from datetime import datetime
+from uuid import uuid4
 
 
 class BaseUser(BaseModel):
-    username: str
+    username: str = Field(default='josue')
 
 
 class UserLogin(BaseUser):
-    password: str
+    password: str = Field(default='123456')
+    grant_type: Optional[str] = None
 
 
 class UserCreate(UserLogin):
     document: str
-    email: str
-    first_name: str
-    last_name: str
+    email: str = Field(default='exemplo@exemplo.com')
+    first_name: str = Field(default='Josué')
+    last_name: str = Field(default='Silva')
 
 
 class LoginResponse(BaseModel):
-    access_token: str
-    refresh_token: str
-    type: str
+    access_token: str = Field(default=uuid4().hex)
+    refresh_token: str = Field(default=uuid4().hex)
+    type: str = Field('Bearer')
 
 
 class UserDetailsResponse(BaseUser):
-    picture: str
-    name: str
-    id: str
-    balance: float
+    picture: str = Field(default='user/default.png')
+    name: str = Field(default='Josué')
+    id: str = Field(default='10')
+    balance: float = Field(default='150.00')
 
 
 class UserResponseModel(BaseUser):
-    id: str
-    email: str
-    dat_insercao: datetime  # Ajuste o tipo de dado conforme necessário
-    status: bool
-    first_name: str
-    last_name: str
-    profile: str
+    id: str = Field(default='10')
+    email: str = Field(default='exemplo@exemplo.com')
+    dat_insercao: datetime = Field(default=datetime.utcnow())
+    status: bool = Field(default=True)
+    first_name: str = Field(default='Josué')
+    last_name: str = Field(default='Silva')
+    profile: str = Field(default='user')
 
 
 class HistoryResponse(BaseModel):
-    id: int
-    balance_id: int
-    previous_value: float
-    current_value: float
-    transaction_value: float
-    month_and_year: str
-    type: str
+    id: int = Field(default='10')
+    balance_id: int = Field(default='50')
+    previous_value: float = Field(default='100.00')
+    current_value: float = Field(default='150.00')
+    transaction_value: float = Field(default='50.00')
+    month_and_year: str = Field(default='12-2023')
+    type: str = Field(default='deposit')
+

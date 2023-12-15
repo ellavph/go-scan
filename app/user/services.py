@@ -3,19 +3,24 @@ from typing import Tuple, Dict
 
 from app.settings.database import get_db
 from app.user.repositories import UserRepository
-from app.user.schemas import UserCreate, UserDetailsResponse
+from app.user.schemas import UserCreate, UserDetailsResponse, UserLogin
 from app.utils.utils import hash_password, verify_password
 from datetime import timedelta
 from app.auth.auth_service import AuthService, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRES
-
+from urllib.parse import parse_qs
 
 class UserService:
     def __init__(self, db=get_db()):
         self.user_repository = UserRepository(db)
 
-    def authenticate_user(self, username: str, password: str) -> tuple[bool, dict[str, any]]:
-        user = self.user_repository.get_user_by_username(username)
-        if user and verify_password(password, user.password):
+    def authenticate_user(self, user_login: str | UserLogin) -> tuple[bool, dict[str, any]]:
+        if isinstance(user_login, str):
+            user_login = parse_qs(user_login)
+            user_login = {key: value[0] for key, value in user_login.items()}
+            user_login = UserLogin(**user_login)
+
+        user = self.user_repository.get_user_by_username(user_login.username)
+        if user and verify_password(user_login.password, user.password):
             # Se o usuário é autenticado com sucesso, gera o token JWT de acesso
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
             access_token = AuthService.create_access_token(data={"username": user.username, "document": user.id, 'profile': user.profile}, expires_delta=access_token_expires)
