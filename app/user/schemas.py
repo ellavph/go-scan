@@ -11,7 +11,6 @@ class BaseUser(BaseModel):
 
 class UserLogin(BaseUser):
     password: str = Field(default='123456')
-    grant_type: Optional[str] = None
 
 
 class UserCreate(UserLogin):
