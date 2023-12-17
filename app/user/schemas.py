@@ -13,11 +13,13 @@ class UserLogin(BaseUser):
     password: str = Field(default='123456')
 
 
-class UserCreate(UserLogin):
-    document: str
+class UserCreate(BaseModel):
+    username: Optional[str] = Field(default=None)
+    password: str = Field(default=None)
+    # document: Optional[str] = Field(default=None)
     email: str = Field(default='exemplo@exemplo.com')
-    first_name: str = Field(default='Josué')
-    last_name: str = Field(default='Silva')
+    # first_name: Optional[str] = Field(default='Josué')
+    # last_name: Optional[str] = Field(default='Silva')
 
 
 class LoginResponse(BaseModel):

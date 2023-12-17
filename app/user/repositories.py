@@ -6,8 +6,8 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_user(self, document: str, username: str, password: str, email: str, first_name: str, last_name: str):
-        user = UserModel(id=document, username=username, password=password, email=email, first_name=first_name, last_name=last_name, profile='user')
+    def create_user(self, password: str, email: str, first_name: str | None = None, last_name: str | None = None, document: str | None = None, username: str | None = None):
+        user = UserModel(id=email, username=email, password=password, email=email, first_name=None, last_name=None, profile='user')
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
