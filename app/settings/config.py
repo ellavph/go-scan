@@ -1,2 +1,2 @@
 # settings/config.py
-DATABASE_URL = "postgresql://vmcgxhhw:OmpiLiB8I_CMJCksQ4LaB737-fHiFnId@silly.db.elephantsql.com/vmcgxhhw"
+DATABASE_URL = "postgresql://kqrqejlz:KTVGQZKqF6_Ce9alEJ_fcWEqAiQF7cJ3@silly.db.elephantsql.com/kqrqejlz"

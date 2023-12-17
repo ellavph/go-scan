@@ -5,6 +5,8 @@
 		{ "src": "/", "dest": "app/main.py" },
 		{ "src": "/docs", "dest": "app/main.py" },
 		{ "src": "/openapi.json", "dest": "app/main.py" },
-    	{ "src": "/users/(.*?)", "dest": "app/main.py" }
+    	{ "src": "/user/(.*?)", "dest": "app/main.py" },
+    	{ "src": "/order/(.*?)", "dest": "app/main.py" },
+    	{ "src": "/product/(.*?)", "dest": "app/main.py" }
 	]
 }

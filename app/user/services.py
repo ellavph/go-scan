@@ -11,11 +11,11 @@ from app.auth.auth_service import AuthService, ACCESS_TOKEN_EXPIRE_MINUTES, REFR
 
 class UserService:
     def __init__(self, db=get_db()):
-        self.user_repository = UserRepository(db)
+        self.__user_repository = UserRepository(db)
 
     def authenticate_user(self, username: str, password: str) -> tuple[bool, dict[str, any]]:
 
-        user = self.user_repository.get_user_by_username(username)
+        user = self.__user_repository.get_user_by_username(username)
         if user and verify_password(password, user.password):
             # Se o usuário é autenticado com sucesso, gera o token JWT de acesso
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -32,9 +32,9 @@ class UserService:
     def create_user(self, user_data: UserCreate):
         user_data.password = hash_password(password=user_data.password)
 
-        user = self.user_repository.create_user(**user_data.model_dump())
+        user = self.__user_repository.create_user(**user_data.model_dump())
         if user:
-            self.user_repository.create_balance(user_id=user.id)
+            self.__user_repository.create_balance(user_id=user.id)
 
         return user
 
@@ -44,7 +44,7 @@ class UserService:
         for field in fields_to_check:
             user = None
             if hasattr(user_data, field):
-                user = self.user_repository.get_user_by_field('id' if field == 'document' else field, getattr(user_data, field))
+                user = self.__user_repository.get_user_by_field('id' if field == 'document' else field, getattr(user_data, field))
 
             if user:
                 return user, field  # Retorna o usuário e o campo correspondente
@@ -52,10 +52,10 @@ class UserService:
         return None, None
 
     def get_details(self, current_user: dict):
-        user = self.user_repository.get_user_by_id(document=current_user.get('document'))
+        user = self.__user_repository.get_user_by_id(document=current_user.get('document'))
         if user is None:
             return None
-        balance = self.user_repository.get_user_balance(user.id)
+        balance = self.__user_repository.get_user_balance(user.id)
         if not balance:
             return None
 
@@ -72,16 +72,16 @@ class UserService:
         if current_user.get('profile') not in ['admin']:
             return historic, 'Not authorized', 403
 
-        user = self.user_repository.get_user_by_id(document=user_id)
+        user = self.__user_repository.get_user_by_id(document=user_id)
         if user is None:
             return historic, 'User not found', 404
 
-        balance = self.user_repository.get_user_balance(user.id)
+        balance = self.__user_repository.get_user_balance(user.id)
 
         if not balance and not month_and_year:
             return historic, 'Bad request: No balance and no specified month/year', 400
 
-        historic = self.user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
+        historic = self.__user_repository.get_user_transaction_history(balance_id=balance.id, month_and_year=month_and_year)
 
         if not historic:
             return [], 'No transaction history available for the specified date', 200
@@ -91,5 +91,5 @@ class UserService:
     def get_all_users(self, current_user: dict):
         if current_user.get('profile') not in ['admin']:
             return []
-        all_users_database = self.user_repository.get_all_users()
+        all_users_database = self.__user_repository.get_all_users()
         return [{k: v for k, v in u.__dict__.items() if k not in ['password']} for u in all_users_database]

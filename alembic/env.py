@@ -11,7 +11,8 @@ from app.settings.database import Base
 # access to the values within the .ini file in use.
 config = context.config
 
-from app.user.models import UserModel
+from app.user.models import UserModel, UserBalance, LogUserBalance
+from app.order.models import Order, OrderItem
 
 
 
