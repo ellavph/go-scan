@@ -6,7 +6,7 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_user(self, password: str, email: str, first_name: str | None = None, last_name: str | None = None, document: str | None = None, username: str | None = None):
+    def create_user(self, password: str, email: str, first_name: str = None, last_name: str = None, document: str = None, username: str = None):
         user = UserModel(id=email, username=email, password=password, email=email, first_name=None, last_name=None, profile='user')
         self.db.add(user)
         self.db.commit()
