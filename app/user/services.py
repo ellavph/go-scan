@@ -7,6 +7,7 @@ from app.user.schemas import UserCreate, UserDetailsResponse, UserLogin
 from app.utils.utils import hash_password, verify_password
 from datetime import timedelta
 from app.auth.auth_service import AuthService, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRES
+from datetime import datetime
 
 
 class UserService:
@@ -91,3 +92,12 @@ class UserService:
             return []
         all_users_database = self.__user_repository.get_all_users()
         return [{k: v for k, v in u.__dict__.items() if k not in ['password']} for u in all_users_database]
+
+    def update_value_balance(self, user: dict, value: float):
+        user_balance = self.__user_repository.get_user_balance(user.get('username'))
+        previous_value = user_balance.balance
+        user_balance.balance = round(user_balance.balance - value, 2)
+
+        self.__user_repository.update_balance(user_balance)
+        self.__user_repository.create_log_balance({'balance_id': user_balance.id, 'previous_value': previous_value, 'current_value': user_balance.balance, 'transaction_value': value, 'month_and_year': '{}-{}'.format(datetime.now().month, datetime.now().year), 'type': 'withdraw'})
+        return user_balance

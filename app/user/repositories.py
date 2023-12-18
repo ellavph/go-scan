@@ -1,5 +1,6 @@
 from app.user.models import UserModel, UserBalance, LogUserBalance
 from sqlalchemy.orm import Session
+from sqlalchemy import desc
 
 
 class UserRepository:
@@ -20,6 +21,19 @@ class UserRepository:
         self.db.refresh(balance)
         return balance
 
+    def update_balance(self, balance: UserBalance):
+        self.db.add(balance)
+        self.db.commit()
+        self.db.refresh(balance)
+        return balance
+
+    def create_log_balance(self, fields: dict):
+        log_balance = LogUserBalance(**fields)
+        self.db.add(log_balance)
+        self.db.commit()
+        self.db.refresh(log_balance)
+        return log_balance
+
     def get_user_by_username(self, username: str):
         return self.db.query(UserModel).filter(UserModel.username == username, UserModel.status).first()
 
@@ -36,7 +50,7 @@ class UserRepository:
         return self.db.query(UserBalance).filter(UserBalance.user_id == user_id).first()
 
     def get_user_transaction_history(self, balance_id: str, month_and_year: str):
-        return list(self.db.query(LogUserBalance).filter(LogUserBalance.balance_id == balance_id, LogUserBalance.month_and_year == month_and_year))
+        return list(self.db.query(LogUserBalance).filter(LogUserBalance.balance_id == balance_id, LogUserBalance.month_and_year == month_and_year, LogUserBalance.status).order_by(desc(LogUserBalance.month_and_year)))
 
     def get_all_users(self):
         return list(self.db.query(UserModel).filter(UserModel.status))

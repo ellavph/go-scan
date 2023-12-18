@@ -8,10 +8,11 @@ class OrderService:
     def __init__(self, db=get_db()):
         self.__order_repository = OrderRepsitory(db)
 
-    def create(self, order: dict, user: dict):
+    def create(self, order: dict, user: dict, user_service):
         order_created = self.__order_repository.create_order(user_id=user.get('username'), status='pending', payment=order.get('payment'), initial_value=order.get('initial_value'), delivery_value=order.get('delivery_value'), amount=order.get('amount'))
         items = [{'order_id': order_created.id, **item} for item in order.get('items')]
         self.__order_repository.create_order_items(items)
+        user_service.update_value_balance(user, order_created.amount)
         return order_created.hash
 
     def detail(self, order_id: str):
