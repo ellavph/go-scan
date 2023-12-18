@@ -69,8 +69,6 @@ class UserService:
 
     def transaction_history(self, user_id: str, month_and_year: str, current_user: dict):
         historic = []
-        if current_user.get('profile') not in ['admin']:
-            return historic, 'Not authorized', 403
 
         user = self.__user_repository.get_user_by_id(document=user_id)
         if user is None:
