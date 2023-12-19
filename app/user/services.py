@@ -20,11 +20,11 @@ class UserService:
         if user and verify_password(password, user.password):
             # Se o usuário é autenticado com sucesso, gera o token JWT de acesso
             access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-            access_token = AuthService.create_access_token(data={"username": user.username, "document": user.id, 'profile': user.profile}, expires_delta=access_token_expires)
+            access_token = AuthService.create_access_token(data={'id': user.id, 'username': user.username, 'document': user.id, 'profile': user.profile}, expires_delta=access_token_expires)
 
             # Gera o token JWT de atualização
             refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRES)  # Expira em 2 minutos, ajuste conforme necessário
-            refresh_token = AuthService.create_access_token(data={"username": user.username, "document": user.id, 'profile': user.profile}, expires_delta=refresh_token_expires)
+            refresh_token = AuthService.create_access_token(data={'id': user.id, 'username': user.username, 'document': user.id, 'profile': user.profile}, expires_delta=refresh_token_expires)
 
             # Retorna ambos os tokens
             return True, {"access_token": access_token, "refresh_token": refresh_token}
@@ -70,6 +70,8 @@ class UserService:
 
     def transaction_history(self, user_id: str, month_and_year: str, current_user: dict):
         historic = []
+        if user_id != current_user.get('id') and current_user.get('profile') not in ['admin']:
+            return historic, 'Access Denied: You do not have the necessary permissions to perform this action. Please contact your administrator for assistance', 403
 
         user = self.__user_repository.get_user_by_id(document=user_id)
         if user is None:
